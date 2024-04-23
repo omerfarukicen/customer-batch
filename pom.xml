@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>3.2.5</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>tr.com.trs</groupId>
+	<artifactId>customer-batch</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>customer-batch</name>
+	<description>customer-batch</description>
+	<properties>
+		<java.version>17</java.version>
+		<maven.compiler.source>17</maven.compiler.source>
+		<maven.compiler.target>17</maven.compiler.target>
+		<mapstruct.version>1.5.5.Final</mapstruct.version>
+
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.retry</groupId>
+			<artifactId>spring-retry</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-batch</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.batch</groupId>
+			<artifactId>spring-batch-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.liquibase</groupId>
+			<artifactId>liquibase-core</artifactId>
+			<version>4.23.2</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.liquibase</groupId>
+				<artifactId>liquibase-maven-plugin</artifactId>
+				<version>4.23.2</version>
+				<configuration>
+					<!--suppress UnresolvedMavenProperty, UnresolvedMavenProperty -->
+					<propertyFile>${profile.propertyFile}</propertyFile>
+					<promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>17</source>
+					<target>17</target>
+					<release>${java.version}</release>
+					<compilerArgs>--enable-preview</compilerArgs>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<excludes>
+						<exclude>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+						</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>maven-group</id>
+			<url>https://repo.turkiyesigorta.com.tr/repository/maven-public/</url>
+		</pluginRepository>
+		<!-- Other plugin repositories if needed -->
+	</pluginRepositories>
+
+	<repositories>
+		<repository>
+			<id>maven-group</id>
+			<url>https://repo.turkiyesigorta.com.tr/repository/maven-public/</url>
+		</repository>
+	</repositories>
+
+	<profiles>
+		<profile>
+			<id>stagingdb</id>
+			<properties>
+				<profile.propertyFile>src/main/resources/db/changelog/liquibase-staging.properties
+				</profile.propertyFile>
+			</properties>
+		</profile>
+		<profile>
+			<id>staging-merge</id>
+			<properties>
+				<profile.propertyFile>src/main/resources/db/changelog/staging-sync/liquibase-staging-merge.properties
+				</profile.propertyFile>
+			</properties>
+		</profile>
+		<profile>
+			<id>staging-dev-diff</id>
+			<properties>
+				<profile.propertyFile>src/main/resources/db/changelog/staging-sync/liquibase-staging-diff.properties
+				</profile.propertyFile>
+			</properties>
+		</profile>
+	</profiles>
+</project>
